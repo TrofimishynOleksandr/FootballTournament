@@ -3,6 +3,7 @@ using FootballTournament.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballTournament.DAL.Migrations
 {
     [DbContext(typeof(FootballTournamentContext))]
-    partial class FootballTournamentContextModelSnapshot : ModelSnapshot
+    [Migration("20240209183935_AddNewCommandsToMenu")]
+    partial class AddNewCommandsToMenu
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +23,7 @@ namespace FootballTournament.DAL.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("FootballTournament.DAL.Models.Team", b =>
+            modelBuilder.Entity("FootballTournament.DAL.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,5 +1,4 @@
-﻿
-namespace FootballTournament.DAL
+﻿namespace FootballTournament.DAL.Models
 {
     public class Team
     {
