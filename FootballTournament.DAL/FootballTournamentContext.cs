@@ -1,5 +1,6 @@
 ﻿using FootballTournament.DAL.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace FootballTournament.DAL
 {
@@ -9,7 +10,13 @@ namespace FootballTournament.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-R452REA\SQLEXPRESS;Initial Catalog=Football Tournament;Integrated Security=True;Connect Timeout=30;");
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            var configuration = builder.Build();
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+
+            optionsBuilder.UseSqlServer(connectionString);
         }
     }
 }
