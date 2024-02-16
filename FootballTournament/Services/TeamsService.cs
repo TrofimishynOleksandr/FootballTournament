@@ -122,7 +122,7 @@ namespace FootballTournament.Services
             var city = Console.ReadLine();
 
             Team team = _teamRepository.FindByNameAndCity(name, city);
-            if(_teamRepository.IsExists(team))
+            if(team != null && _teamRepository.IsExists(team))
             {
                 Console.WriteLine("What do you want to update?\n" +
                         "1.Name\n" +
@@ -135,7 +135,7 @@ namespace FootballTournament.Services
                         "0.Exit");
                 int choice = int.Parse(Console.ReadLine());
 
-                if (choice < 0 || choice > 7) 
+                if (choice < 1 || choice > 7) 
                     return;
                 Console.WriteLine("Enter new value: ");
                 switch (choice)
@@ -189,6 +189,22 @@ namespace FootballTournament.Services
                 }
                 else
                     return;
+            }
+            else
+                Console.WriteLine("Team doesn't exist!");
+        }
+
+        public void GoalsDifference()
+        {
+            Console.Write("Enter name: ");
+            var name = Console.ReadLine();
+            Console.Write("Enter city: ");
+            var city = Console.ReadLine();
+
+            Team team = _teamRepository.FindByNameAndCity(name, city);
+            if (_teamRepository.IsExists(team))
+            {
+                Console.WriteLine($"Scored - conceded: {team.ScoredGoalsAmount - team.ConcededGoalsAmount}");
             }
             else
                 Console.WriteLine("Team doesn't exist!");

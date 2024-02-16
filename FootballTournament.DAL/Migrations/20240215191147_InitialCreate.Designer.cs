@@ -4,6 +4,7 @@ using FootballTournament.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballTournament.DAL.Migrations
 {
     [DbContext(typeof(FootballTournamentContext))]
-    partial class FootballTournamentContextModelSnapshot : ModelSnapshot
+    [Migration("20240215191147_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,21 +130,6 @@ namespace FootballTournament.DAL.Migrations
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("MatchPlayer", b =>
-                {
-                    b.Property<int>("MatchesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlayersScoredId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MatchesId", "PlayersScoredId");
-
-                    b.HasIndex("PlayersScoredId");
-
-                    b.ToTable("MatchPlayer");
-                });
-
             modelBuilder.Entity("FootballTournament.DAL.Models.Match", b =>
                 {
                     b.HasOne("FootballTournament.DAL.Models.Team", "Team1")
@@ -175,21 +162,6 @@ namespace FootballTournament.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Team");
-                });
-
-            modelBuilder.Entity("MatchPlayer", b =>
-                {
-                    b.HasOne("FootballTournament.DAL.Models.Match", null)
-                        .WithMany()
-                        .HasForeignKey("MatchesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FootballTournament.DAL.Models.Player", null)
-                        .WithMany()
-                        .HasForeignKey("PlayersScoredId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("FootballTournament.DAL.Models.Team", b =>

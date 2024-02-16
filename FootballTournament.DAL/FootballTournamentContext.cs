@@ -8,6 +8,10 @@ namespace FootballTournament.DAL
     {
         public DbSet<Team> Teams { get; set; }
 
+        public DbSet<Player> Players { get; set; }
+
+        public DbSet<Match> Matches { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var builder = new ConfigurationBuilder()
@@ -17,6 +21,21 @@ namespace FootballTournament.DAL
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
             optionsBuilder.UseSqlServer(connectionString);
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Match>()
+                .HasOne(m => m.Team1)
+                .WithMany()
+                .HasForeignKey(k => k.Team1Id)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Match>()
+                .HasOne(m => m.Team2)
+                .WithMany()
+                .HasForeignKey(k => k.Team2Id)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

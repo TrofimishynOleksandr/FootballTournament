@@ -6,8 +6,22 @@ using System.Threading.Tasks;
 
 namespace FootballTournament.DAL.Models
 {
-    internal class Player
+    public class Player
     {
+        public int Id { get; set; }
 
+        public string FullName { get; set; }
+
+        public string Country { get; set; }
+
+        public int Number { get; set; }
+
+        public string Position { get; set; }
+
+        public List<Match> Matches { get; set; }
+
+        public int TeamId { get; set; }
+
+        public Team Team { get; set; }
     }
 }

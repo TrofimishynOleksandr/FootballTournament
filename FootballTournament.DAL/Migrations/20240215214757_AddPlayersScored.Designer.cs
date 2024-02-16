@@ -4,6 +4,7 @@ using FootballTournament.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballTournament.DAL.Migrations
 {
     [DbContext(typeof(FootballTournamentContext))]
-    partial class FootballTournamentContextModelSnapshot : ModelSnapshot
+    [Migration("20240215214757_AddPlayersScored")]
+    partial class AddPlayersScored
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

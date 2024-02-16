@@ -77,6 +77,11 @@ namespace FootballTournament.DAL.Repositories
             return _context.Teams.Any(t => t.Name == team.Name && t.City == team.City);
         }
 
+        public bool IsExistsWithId(int id)
+        {
+            return _context.Teams.Any(t => t.Id == id);
+        }
+
         public void UpdateTeam(Team team)
         {
             _context.Teams.Update(team);
