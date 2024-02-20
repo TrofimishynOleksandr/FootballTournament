@@ -14,7 +14,7 @@ namespace FootballTournament
         {
             using (var context = new FootballTournamentContext())
             {
-                FillDb();
+                new FootballTournamentService(context).FillDb();
                 Menu();
             }
         }
@@ -45,140 +45,129 @@ namespace FootballTournament
                     "19.Add match\n" +
                     "20.Update match\n" +
                     "21.Delete match\n" +
+                    "22.Show top 3 bombardiers of team\n" +
+                    "23.Show top 1 bombardier of team\n" +
+                    "24.Show top 3 bombardiers of tournament\n" +
+                    "25.Show top 1 bombardier of tournament\n" +
+                    "26.Show top 3 teams with max scored\n" +
+                    "27.Show top 1 team with max scored\n" +
+                    "28.Show top 3 teams with min conceded\n" +
+                    "29.Show top 1 team with min conceded\n" +
+                    "30.Show top 3 teams with max points\n" +
+                    "31.Show top 1 team with max points\n" +
+                    "32.Show top 3 teams with min points\n" +
+                    "33.Show top 1 team with min points\n" +
                     "0.Exit");
                 int choice = int.Parse(Console.ReadLine());
-                if (choice < 1 || choice > 20) return;
+                if (choice < 1 || choice > 33) return;
 
                 using (var context = new FootballTournamentContext())
                 {
-                    TeamsService teamsService = new TeamsService(context);
-                    MatchesService matchesService = new MatchesService(context);
+                    FootballTournamentService footballTournamentService = new FootballTournamentService(context);
 
                     switch (choice)
                     {
                         case 1:
-                            teamsService.ShowTeams();
+                            footballTournamentService.ShowTeams();
                             break;
                         case 2:
-                            teamsService.FindByName();
+                            footballTournamentService.FindByName();
                             break;
                         case 3:
-                            teamsService.FindByCity();
+                            footballTournamentService.FindByCity();
                             break;
                         case 4:
-                            teamsService.FindByNameAndCity();
+                            footballTournamentService.FindByNameAndCity();
                             break;
                         case 5:
-                            teamsService.ShowTeamWithMaxVictories();
+                            footballTournamentService.ShowTeamWithMaxVictories();
                             break;
                         case 6:
-                            teamsService.ShowTeamWithMaxLosses();
+                            footballTournamentService.ShowTeamWithMaxLosses();
                             break;
                         case 7:
-                            teamsService.ShowTeamWithMaxDraws();
+                            footballTournamentService.ShowTeamWithMaxDraws();
                             break;
                         case 8:
-                            teamsService.ShowTeamWithMaxScored();
+                            footballTournamentService.ShowTeamWithMaxScored();
                             break;
                         case 9:
-                            teamsService.ShowTeamWithMaxConceded();
+                            footballTournamentService.ShowTeamWithMaxConceded();
                             break;
                         case 10:
-                            teamsService.AddTeam();
+                            footballTournamentService.AddTeam();
                             break;
                         case 11:
-                            teamsService.UpdateTeam();
+                            footballTournamentService.UpdateTeam();
                             break;
                         case 12:
-                            teamsService.DeleteTeam();
+                            footballTournamentService.DeleteTeam();
                             break;
                         case 13:
-                            teamsService.GoalsDifference();
+                            footballTournamentService.GoalsDifference();
                             break;
                         case 14:
-                            matchesService.ShowMatches();
+                            footballTournamentService.ShowMatches();
                             break;
                         case 15:
-                            matchesService.ShowMatch();
+                            footballTournamentService.ShowMatch();
                             break;
                         case 16:
-                            matchesService.ShowMatchWithDate();
+                            footballTournamentService.ShowMatchWithDate();
                             break;
                         case 17:
-                            matchesService.ShowMatchesOfTeam();
+                            footballTournamentService.ShowMatchesOfTeam();
                             break;
                         case 18:
-                            matchesService.ShowPlayersScoredInDate();
+                            footballTournamentService.ShowPlayersScoredInDate();
                             break;
                         case 19:
-                            matchesService.AddMatch();
+                            footballTournamentService.AddMatch();
                             break;
                         case 20:
-                            matchesService.UpdateMatch();
+                            footballTournamentService.UpdateMatch();
                             break;
                         case 21:
-                            matchesService.DeleteMatch();
+                            footballTournamentService.DeleteMatch();
+                            break;
+                        case 22:
+                            footballTournamentService.SelectTopBombardiersOfTeam(3);
+                            break;
+                        case 23:
+                            footballTournamentService.SelectTopBombardiersOfTeam(1);
+                            break;
+                        case 24:
+                            footballTournamentService.SelectTopBombardiersOfTournament(3);
+                            break;
+                        case 25:
+                            footballTournamentService.SelectTopBombardiersOfTournament(1);
+                            break;
+                        case 26:
+                            footballTournamentService.SelectTeamsWithMaxScored(3);
+                            break;
+                        case 27:
+                            footballTournamentService.SelectTeamsWithMaxScored(1);
+                            break;
+                        case 28:
+                            footballTournamentService.SelectTeamsWithMinConceded(3);
+                            break;
+                        case 29:
+                            footballTournamentService.SelectTeamsWithMinConceded(1);
+                            break;
+                        case 30:
+                            footballTournamentService.SelectTeamsWithMaxPoints(3);
+                            break;
+                        case 31:
+                            footballTournamentService.SelectTeamsWithMaxPoints(1);
+                            break;
+                        case 32:
+                            footballTournamentService.SelectTeamsWithMinPoints(3);
+                            break;
+                        case 33:
+                            footballTournamentService.SelectTeamsWithMinPoints(1);
                             break;
                     }
                 }
-            }
-        }
-
-        static void FillDb()
-        {
-            using (var context = new FootballTournamentContext())
-            {
-                if (context.Teams.Count() == 0)
-                {
-                    List<Team> teams = new List<Team>()
-                    {
-                        new Team() { Name = "Team1", City = "City3", VictoriesAmount = 2, LossesAmount = 1, DrawsAmount = 1, ScoredGoalsAmount = 4, ConcededGoalsAmount = 2 },
-                        new Team() { Name = "Team4", City = "City2", VictoriesAmount = 5, LossesAmount = 0, DrawsAmount = 2, ScoredGoalsAmount = 12, ConcededGoalsAmount = 3 },
-                        new Team() { Name = "Team2", City = "City3", VictoriesAmount = 3, LossesAmount = 4, DrawsAmount = 4, ScoredGoalsAmount = 5, ConcededGoalsAmount = 7 },
-                        new Team() { Name = "Team3", City = "City1", VictoriesAmount = 7, LossesAmount = 3, DrawsAmount = 2, ScoredGoalsAmount = 15, ConcededGoalsAmount = 5 }
-                    };
-
-                    context.Teams.AddRange(teams);
-                    context.SaveChanges();
-                }
-
-                if (context.Players.Count() == 0)
-                {
-                    List<Player> players = new List<Player>()
-                    {
-                        new Player() { FullName = "Player2", Country = "Country3", Number = 7, Position = "ST", Team = context.Teams.ToList()[3]},
-                        new Player() { FullName = "Player3", Country = "Country2", Number = 2, Position = "LW", Team = context.Teams.ToList()[2]},
-                        new Player() { FullName = "Player5", Country = "Country3", Number = 17, Position = "RW", Team = context.Teams.ToList()[1]},
-                        new Player() { FullName = "Player1", Country = "Country5", Number = 13, Position = "CT", Team = context.Teams.ToList()[0]},
-                        new Player() { FullName = "Player4", Country = "Country1", Number = 21, Position = "GK", Team = context.Teams.ToList()[3]},
-                        new Player() { FullName = "Player6", Country = "Country2", Number = 3, Position = "ST", Team = context.Teams.ToList()[2]},
-                        new Player() { FullName = "Player8", Country = "Country4", Number = 1, Position = "GK", Team = context.Teams.ToList()[1]},
-                        new Player() { FullName = "Player7", Country = "Country5", Number = 10, Position = "CT", Team = context.Teams.ToList()[0]}
-                    };
-
-                    context.Players.AddRange(players);
-                    context.SaveChanges();
-                }
-
-                if (context.Matches.Count() == 0)
-                {
-                    List<Match> matches = new List<Match>()
-                    {
-                        new Match() {Team1 = context.Teams.ToList()[0], Team2 = context.Teams.ToList()[3], Team1Score = 3, Team2Score = 4, Date = new DateTime(2024, 1, 5), 
-                            PlayersScored = new List<Player>(){context.Players.ToList()[0], context.Players.ToList()[3], context.Players.ToList()[4], context.Players.ToList()[7] } },
-                        new Match() {Team1 = context.Teams.ToList()[3], Team2 = context.Teams.ToList()[1], Team1Score = 4, Team2Score = 1, Date = new DateTime(2024, 1, 15),
-                            PlayersScored = new List<Player>(){context.Players.ToList()[0], context.Players.ToList()[2], context.Players.ToList()[4] }},
-                        new Match() {Team1 = context.Teams.ToList()[1], Team2 = context.Teams.ToList()[2], Team1Score = 1, Team2Score = 0, Date = new DateTime(2023, 12, 13),
-                            PlayersScored = new List<Player>(){context.Players.ToList()[2] }},
-                        new Match() {Team1 = context.Teams.ToList()[0], Team2 = context.Teams.ToList()[2], Team1Score = 2, Team2Score = 3, Date = new DateTime(2023, 12, 6),
-                            PlayersScored = new List<Player>(){context.Players.ToList()[1], context.Players.ToList()[3], context.Players.ToList()[5], context.Players.ToList()[7] }}
-                    };
-
-                    context.Matches.AddRange(matches);
-                    context.SaveChanges();
-                }
-
-
             }
         }
     }

@@ -3,19 +3,20 @@ using FootballTournament.DAL.Models;
 using FootballTournament.DAL.Repositories;
 using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Match = FootballTournament.DAL.Models.Match;
 
-namespace FootballTournament.Services
+namespace FootballTournament.Providers
 {
-    public class MatchesService
+    public class MatchesProvider
     {
         private readonly MatchRepository _matchRepository;
         private readonly TeamRepository _teamRepository;
 
-        public MatchesService(FootballTournamentContext context)
+        public MatchesProvider(FootballTournamentContext context)
         {
             _matchRepository = new MatchRepository(context);
             _teamRepository = new TeamRepository(context);
@@ -51,7 +52,7 @@ namespace FootballTournament.Services
         public void ShowMatches()
         {
             var matches = _matchRepository.GetMatches().ToList();
-            foreach(var match in matches)
+            foreach (var match in matches)
             {
                 ShowMatch(match);
             }
@@ -59,7 +60,7 @@ namespace FootballTournament.Services
 
         public void ShowMatches(IEnumerable<Match> matches)
         {
-            foreach(Match match in matches)
+            foreach (Match match in matches)
             {
                 ShowMatch(match);
             }
@@ -69,7 +70,7 @@ namespace FootballTournament.Services
         {
             Console.WriteLine("Enter date: ");
             var date = DateTime.Parse(Console.ReadLine());
-            if(date != null)
+            if (date != null)
                 ShowMatches(_matchRepository.MatchesWithDate(date));
             else
                 Console.WriteLine("Wrong date!");
@@ -84,21 +85,26 @@ namespace FootballTournament.Services
 
             var team = _teamRepository.FindByNameAndCity(name, city);
 
-            if(team != null)
+            if (team != null)
             {
                 ShowMatches(_matchRepository.MatchesWithTeam(team));
             }
+        }
+
+        public void ShowPlayer(Player player)
+        {
+            Console.WriteLine($"{player.FullName}, {player.Country}, {player.Number}, {player.Position}, {player.Team.Name}");
         }
 
         public void ShowPlayersScoredInDate()
         {
             Console.WriteLine("Enter date:");
             DateTime date = DateTime.Parse(Console.ReadLine());
-            foreach(var match in _matchRepository.MatchesWithDate(date))
+            foreach (var match in _matchRepository.MatchesWithDate(date))
             {
-                foreach(var player in match.PlayersScored)
+                foreach (var player in match.PlayersScored)
                 {
-                    Console.WriteLine($"{player.FullName}, {player.Country}, {player.Number}, {player.Position}, {player.Team.Name}");
+                    ShowPlayer(player);
                 }
             }
         }
@@ -222,6 +228,60 @@ namespace FootballTournament.Services
             }
             else
                 Console.WriteLine("Match doesn't exist!");
+        }
+
+
+        public void SelectTopBombardiersOfTeam(int top)
+        {
+            Team team = new Team();
+
+            Console.WriteLine("Enter team name: ");
+            team.Name = Console.ReadLine();
+            Console.WriteLine("Enter team city: ");
+            team.City = Console.ReadLine();
+
+            if (_teamRepository.IsExists(team))
+            {
+                team = _teamRepository.FindByNameAndCity(team.Name, team.City);
+
+                var matchesWherePlayersScored = from match in _matchRepository.GetMatches()
+                                                where match.Team1 == team || match.Team2 == team
+                                                select match.PlayersScored;
+
+                var topPlayers = matchesWherePlayersScored
+                    .Where(match => match != null)
+                    .SelectMany(match => match)
+                    .ToList()
+                    .GroupBy(p => p)
+                    .OrderByDescending(p => p.Count())
+                    .Select(p => p.Key)
+                    .Take(top);
+
+                foreach (var player in topPlayers)
+                {
+                    ShowPlayer(player);
+                }
+            }
+        }
+
+        public void SelectTopBombardiersOfTournament(int top)
+        {
+            var matchesWherePlayersScored = from match in _matchRepository.GetMatches()
+                                            select match.PlayersScored;
+
+            var topPlayers = matchesWherePlayersScored
+                .Where(match => match != null)
+                .SelectMany(match => match)
+                .ToList()
+                .GroupBy(p => p)
+                .OrderByDescending(p => p.Count())
+                .Select(p => p.Key)
+                .Take(top);
+
+            foreach (var player in topPlayers)
+            {
+                ShowPlayer(player);
+            }
         }
     }
 }

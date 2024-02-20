@@ -24,12 +24,12 @@ namespace FootballTournament.DAL.Repositories
 
         public IEnumerable<Match> GetMatches() 
         {
-            return _context.Matches.Include(t => t.Team1).Include(t => t.Team2);
+            return _context.Matches.Include(t => t.Team1).Include(t => t.Team2).Include(p => p.PlayersScored);
         }
 
         public IEnumerable<Match> MatchesWithTeam(Team team)
         {
-            return _context.Matches.Include(t => t.Team1).Include(t => t.Team2).Where(m => m.Team1 == team || m.Team2 == team);
+            return _context.Matches.Include(t => t.Team1).Include(t => t.Team2).Include(p => p.PlayersScored).Where(m => m.Team1 == team || m.Team2 == team);
         }
 
         public bool IsExists(Match match)

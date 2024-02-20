@@ -7,21 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FootballTournament.Services
+namespace FootballTournament.Providers
 {
-    public class TeamsService
+    public class TeamsProvider
     {
         private readonly TeamRepository _teamRepository;
 
-        public TeamsService(FootballTournamentContext context)
+        public TeamsProvider(FootballTournamentContext context)
         {
             _teamRepository = new TeamRepository(context);
         }
 
-        static void ShowTeam(Team team)
+        public void ShowTeam(Team team)
         {
-            Console.WriteLine($"{team.Name}, {team.City}, {team.VictoriesAmount}, {team.LossesAmount}, {team.DrawsAmount}, " +
-                $"{team.ScoredGoalsAmount}, {team.ConcededGoalsAmount}");
+            Console.WriteLine($"{team.Name}, {team.City}, V: {team.VictoriesAmount}, L: {team.LossesAmount}, D: {team.DrawsAmount}, " +
+                $"Sc: {team.ScoredGoalsAmount}, Con: {team.ConcededGoalsAmount}, Points: {GetPoints(team)}");
         }
 
         public void ShowTeams()
@@ -108,7 +108,7 @@ namespace FootballTournament.Services
             Console.Write("Enter conceded goals amount: ");
             team.ConcededGoalsAmount = int.Parse(Console.ReadLine());
 
-            if(!_teamRepository.IsExists(team))
+            if (!_teamRepository.IsExists(team))
                 _teamRepository.AddTeam(team);
             else
                 Console.WriteLine("This team is already exists!");
@@ -122,7 +122,7 @@ namespace FootballTournament.Services
             var city = Console.ReadLine();
 
             Team team = _teamRepository.FindByNameAndCity(name, city);
-            if(team != null && _teamRepository.IsExists(team))
+            if (team != null && _teamRepository.IsExists(team))
             {
                 Console.WriteLine("What do you want to update?\n" +
                         "1.Name\n" +
@@ -135,7 +135,7 @@ namespace FootballTournament.Services
                         "0.Exit");
                 int choice = int.Parse(Console.ReadLine());
 
-                if (choice < 1 || choice > 7) 
+                if (choice < 1 || choice > 7)
                     return;
                 Console.WriteLine("Enter new value: ");
                 switch (choice)
@@ -208,6 +208,48 @@ namespace FootballTournament.Services
             }
             else
                 Console.WriteLine("Team doesn't exist!");
+        }
+
+        public void SelectTeamsWithMaxScored(int top)
+        {
+            var topTeamsByScored = _teamRepository.GetTeams().ToList().OrderByDescending(t => t.ScoredGoalsAmount).Take(top);
+
+            foreach (var team in topTeamsByScored)
+            {
+                ShowTeam(team);
+            }
+        }
+
+        public void SelectTeamsWithMinConceded(int top)
+        {
+            var topTeamsByScored = _teamRepository.GetTeams().ToList().OrderBy(t => t.ConcededGoalsAmount).Take(top);
+
+            foreach (var team in topTeamsByScored)
+            {
+                ShowTeam(team);
+            }
+        }
+
+        public int GetPoints(Team team) => team.VictoriesAmount * 3 + team.DrawsAmount;
+
+        public void SelectTeamsWithMaxPoints(int top)
+        {
+            var topTeamsByPoints = _teamRepository.GetTeams().ToList().OrderByDescending(t => GetPoints(t)).Take(top);
+
+            foreach (var team in topTeamsByPoints)
+            {
+                ShowTeam(team);
+            }
+        }
+
+        public void SelectTeamsWithMinPoints(int top)
+        {
+            var topTeamsByPoints = _teamRepository.GetTeams().ToList().OrderBy(t => GetPoints(t)).Take(top);
+
+            foreach (var team in topTeamsByPoints)
+            {
+                ShowTeam(team);
+            }
         }
     }
 }
