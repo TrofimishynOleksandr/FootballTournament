@@ -64,30 +64,15 @@ namespace FootballTournament.Providers
             ShowTeam(_teamRepository.FindByNameAndCity(name, city));
         }
 
-        public void ShowTeamWithMaxVictories()
-        {
-            ShowTeam(_teamRepository.TeamWithMaxVictories());
-        }
+        public void ShowTeamWithMaxVictories() => ShowTeam(_teamRepository.TeamWithMaxVictories());
 
-        public void ShowTeamWithMaxLosses()
-        {
-            ShowTeam(_teamRepository.TeamWithMaxLosses());
-        }
+        public void ShowTeamWithMaxLosses() => ShowTeam(_teamRepository.TeamWithMaxLosses());
 
-        public void ShowTeamWithMaxDraws()
-        {
-            ShowTeam(_teamRepository.TeamWithMaxDraws());
-        }
+        public void ShowTeamWithMaxDraws() => ShowTeam(_teamRepository.TeamWithMaxDraws());
 
-        public void ShowTeamWithMaxScored()
-        {
-            ShowTeam(_teamRepository.TeamWithMaxScored());
-        }
+        public void ShowTeamWithMaxScored() => ShowTeam(_teamRepository.TeamWithMaxScored());
 
-        public void ShowTeamWithMaxConceded()
-        {
-            ShowTeam(_teamRepository.TeamWithMaxConceded());
-        }
+        public void ShowTeamWithMaxConceded() => ShowTeam(_teamRepository.TeamWithMaxConceded());
 
         public void AddTeam()
         {
