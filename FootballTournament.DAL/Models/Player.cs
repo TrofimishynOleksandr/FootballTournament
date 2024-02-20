@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace FootballTournament.DAL.Models
 
         public int Number { get; set; }
 
+        [MinLength(2), MaxLength(3)]
         public string Position { get; set; }
 
         public List<Match> Matches { get; set; }

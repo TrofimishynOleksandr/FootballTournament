@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace FootballTournament.DAL.Models
 {
+    [Table("TournamentMatches")]
     public class Match
     {
         public int Id { get; set; }
@@ -25,6 +26,7 @@ namespace FootballTournament.DAL.Models
 
         public List<Player> PlayersScored { get; set; }
 
+        [Column("DateOfMatch", TypeName = "Date")]
         public DateTime Date { get; set; }
     }
 }
